@@ -25,10 +25,10 @@ export class CarsTableComponent implements OnInit {
   colorPresentation = ColorPresentation;
   searchText = '';
   text: string;
-  serial: string;
-  carType: string;
-  carColor: string;
-  name: string;
+  serial = '';
+  carType = '';
+  carColor = '';
+  name = '';
   colorOptions: ColorOptionCode[] = [];
 
   constructor(private carsService: CarsService) {
@@ -39,9 +39,10 @@ export class CarsTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carsService.getCars().subscribe(value => {
+    this.carsService.getCars().subscribe((value: Car[]) => {
       this.elements = value;
       this.initNoDashSerials();
+      this.elements.sort((a, b) => Number(a.carSerialWithNoDashes) - Number(b.carSerialWithNoDashes));
       this.searchItems();
     });
 
@@ -67,13 +68,15 @@ export class CarsTableComponent implements OnInit {
   }
 
   addCar(): void {
-    const newCar: Car = {
-      id: uuidv4(), carType: this.carType, carSerial: this.serial,
-      name: this.name, color: this.carColor
-    };
+    if (this.validateNewCarInsert()) {
+      const newCar: Car = {
+        id: uuidv4(), carType: this.carType, carSerial: this.serial,
+        name: this.name, color: this.carColor
+      };
 
-    this.initInputs();
-    this.carsService.addCar(newCar).subscribe();
+      this.initInputs();
+      this.carsService.addCar(newCar).subscribe();
+    }
   }
 
   private initInputs(): void {
@@ -99,5 +102,15 @@ export class CarsTableComponent implements OnInit {
         }
       });
     });
+  }
+
+  clearSearch(): void {
+    this.searchText = '';
+    this.searchItems();
+  }
+
+  validateNewCarInsert(): boolean {
+    return this.carType.trim().length > 0 && this.carColor.length > 0 &&
+      this.serial.trim().length > 0 && this.name.trim().length > 0;
   }
 }
