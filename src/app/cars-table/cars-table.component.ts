@@ -52,7 +52,8 @@ export class CarsTableComponent implements OnInit {
     if (!this.searchText) {
       this.filteredElements = this.mdbTable.getDataSource();
     } else {
-      this.filteredElements = this.mdbTable.searchLocalDataBy(this.searchText);
+      this.filteredElements = this.mdbTable.searchLocalDataByMultipleFields(this.searchText,
+        ['name', 'carSerial', 'carType']);
     }
   }
 
