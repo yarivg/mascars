@@ -1,0 +1,9 @@
+.md-form label {
+  position: absolute;
+  right: 0!important;
+  left:unset;
+}
+
+.md-form label.active {
+  transform: translate(15px, -14px) scale(0.8);
+}

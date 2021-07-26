@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 mx-auto">
+      <div class="md-form">
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          class="form-control"
+          id="search"
+          mdbInput
+          dir="rtl"
+        />
+        <label for="search">חיפוש</label>
+      </div>
+    </div>
+  </div>
+  <table mdbTable class="z-depth-1 text-center" dir="rtl">
+    <thead>
+    <tr>
+      <th
+        *ngFor="let head of headElements; let i = index"
+        scope="col">
+        {{head}}
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="md-form">
+      <td>
+        <input mdbInput type="text" name="text" [(ngModel)]="serial" id="serialForm" class="form-control">
+      </td>
+      <td>
+        <input mdbInput type="text" name="text" [(ngModel)]="carType" id="carTypeForm" class="form-control">
+      </td>
+      <td>
+        <input mdbInput type="text" name="text" [(ngModel)]="carColor" id="colorForm" class="form-control">
+      </td>
+      <td>
+        <input mdbInput type="text" name="text" [(ngModel)]="name" id="nameForm" class="form-control">
+      </td>
+      <td>
+        <mdb-icon fas icon="plus-circle" class="text-success"
+                  (click)="addCar()" style="cursor: pointer" size="lg"></mdb-icon>
+      </td>
+    </tr>
+    <tr *ngFor="let el of filteredElements; let i = index">
+      <th scope="row">{{el.carSerial}}</th>
+      <td>{{el.carType}}</td>
+      <td>
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="ml-2" [ngStyle]="{'background-color': colorPresentation[el.color].rgb}"
+               style="width: 1vw; height: 2vh">
+          </div>
+          {{colorPresentation[el.color].text}}
+        </div>
+      </td>
+      <td>{{el.name}}</td>
+      <td style="width: 8vw">
+        <div class="d-flex justify-content-around">
+<!--          <mdb-icon far icon="edit" class="indigo-text" size="lg"></mdb-icon>-->
+          <mdb-icon (click)="deleteCar(el.id)" far icon="trash-alt"
+                    class="red-text" style="cursor: pointer" size="lg"></mdb-icon>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
