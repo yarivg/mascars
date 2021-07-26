@@ -1,7 +1,17 @@
 <div class="container">
   <div class="row">
+    <div class="col-md-3 mx-auto">
+      <div class="my-3">
+        <div><b>כמות רכבים כוללת: </b>
+          {{elements.length}}
+        </div>
+        <div><b>כמות רכבים בסינון: </b>
+          {{filteredElements.length}}
+        </div>
+      </div>
+    </div>
     <div class="col-md-4 mx-auto">
-      <div class="md-form">
+      <div class="md-form my-3">
         <input
           type="text"
           [(ngModel)]="searchText"
@@ -14,55 +24,63 @@
       </div>
     </div>
   </div>
-  <table mdbTable class="z-depth-1 text-center" dir="rtl">
-    <thead>
-    <tr>
-      <th
-        *ngFor="let head of headElements; let i = index"
-        scope="col">
-        {{head}}
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr class="md-form">
-      <td>
-        <input mdbInput type="text" name="text" [(ngModel)]="serial" id="serialForm" class="form-control">
-      </td>
-      <td>
-        <input mdbInput type="text" name="text" [(ngModel)]="carType" id="carTypeForm" class="form-control">
-      </td>
-      <td>
-        <input mdbInput type="text" name="text" [(ngModel)]="carColor" id="colorForm" class="form-control">
-      </td>
-      <td>
-        <input mdbInput type="text" name="text" [(ngModel)]="name" id="nameForm" class="form-control">
-      </td>
-      <td>
-        <mdb-icon fas icon="plus-circle" class="text-success"
-                  (click)="addCar()" style="cursor: pointer" size="lg"></mdb-icon>
-      </td>
-    </tr>
-    <tr *ngFor="let el of filteredElements; let i = index">
-      <th scope="row">{{el.carSerial}}</th>
-      <td>{{el.carType}}</td>
-      <td>
-        <div class="d-flex justify-content-center align-items-center">
-          <div class="ml-2" [ngStyle]="{'background-color': colorPresentation[el.color].rgb}"
-               style="width: 1vw; height: 2vh">
+  <div class="table-responsive-sm">
+    <table mdbTable mdbTableScroll maxHeight="200" [bordered]="true" class="z-depth-1 text-center"
+           dir="rtl" [scrollY]="true" [maxHeight]="300" [stickyHeader]="true"
+           [stickyHeaderBgColor]="'#283593'" [stickyHeaderTextColor]="'#ffffff'">
+      <thead>
+      <tr>
+        <th class="py-2 px-1"
+            *ngFor="let head of headElements; let i = index"
+            scope="col">
+          <b>{{head}}</b>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="md-form">
+        <td class="py-1">
+          <input mdbInput type="text" name="text" [(ngModel)]="serial" id="serialForm" class="form-control">
+        </td>
+        <td class="py-1">
+          <input mdbInput type="text" name="text" [(ngModel)]="carType" id="carTypeForm" class="form-control">
+        </td>
+        <td class="py-1">
+          <select class="browser-default custom-select" [(ngModel)]="carColor">
+            <option [value]="undefined" selected>בחר צבע</option>
+            <option *ngFor="let colorOption of colorOptions" [value]="colorOption.colorKey">{{colorOption.colorOption.text}}</option>
+          </select>
+        </td>
+        <td class="py-1">
+          <input mdbInput type="text" name="text" [(ngModel)]="name" id="nameForm" class="form-control">
+        </td>
+        <td>
+          <mdb-icon fas icon="plus-circle" class="text-success"
+                    (click)="addCar()" style="cursor: pointer" size="lg"></mdb-icon>
+        </td>
+      </tr>
+      <tr *ngFor="let el of filteredElements; let i = index">
+        <th scope="row">{{el.carSerial}}</th>
+        <td>{{el.carType}}</td>
+        <td class="p-2">
+          <div class="d-flex justify-content-center align-items-center p-0">
+            <div class="ml-2" [ngStyle]="{'background-color': colorPresentation[el.color].rgb}"
+                 style="width: 2.5vw; height: 2.5vw; right: 6vw; position: relative; bottom: 1vh;">
+            </div>
+            <br/>
+            {{colorPresentation[el.color].text}}
           </div>
-          {{colorPresentation[el.color].text}}
-        </div>
-      </td>
-      <td>{{el.name}}</td>
-      <td style="width: 8vw">
-        <div class="d-flex justify-content-around">
-<!--          <mdb-icon far icon="edit" class="indigo-text" size="lg"></mdb-icon>-->
-          <mdb-icon (click)="deleteCar(el.id)" far icon="trash-alt"
-                    class="red-text" style="cursor: pointer" size="lg"></mdb-icon>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+        </td>
+        <td>{{el.name}}</td>
+        <td style="width: 8vw">
+          <div class="d-flex justify-content-around">
+            <!--          <mdb-icon far icon="edit" class="indigo-text" size="lg"></mdb-icon>-->
+            <mdb-icon (click)="deleteCar(el)" far icon="trash-alt"
+                      class="red-text" style="cursor: pointer" size="lg"></mdb-icon>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

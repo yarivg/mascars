@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {from, Observable, of} from 'rxjs';
-import {Car} from '../car';
+import {from, Observable} from 'rxjs';
+import {Car} from '../entities/car';
 
 @Injectable()
 export class CarsService {

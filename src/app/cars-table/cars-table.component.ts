@@ -1,9 +1,10 @@
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MdbTableDirective} from 'angular-bootstrap-md';
 import {ColorPresentation} from '../ColorPresentation';
-import {Car} from '../car';
+import {Car} from '../entities/car';
 import {CarsService} from '../services/cars.service';
 import {v4 as uuidv4} from 'uuid';
+import {ColorOptionCode} from '../entities/color-option-code';
 
 @Component({
   selector: 'app-cars-table',
@@ -18,7 +19,8 @@ export class CarsTableComponent implements OnInit {
     'מספר רכב',
     'סוג רכב',
     'צבע',
-    'שם'
+    'שם',
+    'פעולות'
   ];
   colorPresentation = ColorPresentation;
   searchText = '';
@@ -27,7 +29,7 @@ export class CarsTableComponent implements OnInit {
   carType: string;
   carColor: string;
   name: string;
-
+  colorOptions: ColorOptionCode[] = [];
 
   constructor(private carsService: CarsService) {
   }
@@ -44,6 +46,7 @@ export class CarsTableComponent implements OnInit {
     });
 
     this.mdbTable.setDataSource(this.elements);
+    this.initColorOptions();
   }
 
   searchItems(): void {
@@ -53,13 +56,14 @@ export class CarsTableComponent implements OnInit {
       this.filteredElements = this.mdbTable.getDataSource();
     } else {
       this.filteredElements = this.mdbTable.searchLocalDataByMultipleFields(this.searchText,
-        ['name', 'carSerial', 'carType']);
+        ['name', 'carSerial', 'carType', 'carSerialWithNoDashes']);
     }
   }
 
-
-  deleteCar(id: string): void {
-    this.carsService.removeCar(id).subscribe();
+  deleteCar(car: Car): void {
+    if (confirm('האם למחוק את הרכב של ' + car.name + '?')) {
+      this.carsService.removeCar(car.id).subscribe();
+    }
   }
 
   addCar(): void {
@@ -69,7 +73,6 @@ export class CarsTableComponent implements OnInit {
     };
 
     this.initInputs();
-
     this.carsService.addCar(newCar).subscribe();
   }
 
@@ -83,6 +86,18 @@ export class CarsTableComponent implements OnInit {
   private initNoDashSerials(): void {
     this.elements.forEach(elem => {
       elem.carSerialWithNoDashes = elem.carSerial.split('-').join('');
+    });
+  }
+
+  private initColorOptions(): void {
+    Object.keys(ColorPresentation).forEach(key => {
+      this.colorOptions.push({
+        colorKey: key,
+        colorOption: {
+          text: ColorPresentation[key].text,
+          rgb: ColorPresentation[key].rgb
+        }
+      });
     });
   }
 }
