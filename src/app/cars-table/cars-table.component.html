@@ -1,16 +1,16 @@
 <div class="container-fluid">
   <div class="row d-flex justify-content-around align-items-center">
     <div class="col-xs-4 text-right">
-      <div><b>כמות רכבים כוללת: </b>
+      <div><b>סך אישורים: </b>
         {{elements.length}}
       </div>
-      <div><b>כמות רכבים בסינון: </b>
+      <div><b>אישורים בסינון: </b>
         {{filteredElements.length}}
       </div>
     </div>
     <div class="col-xs-3 d-flex justify-content-between align-items-center">
-      <div class="mr-2 ">
-        <button type="button" mdbBtn color="primary" (click)="clearSearch()" mdbWavesEffect>נקה</button>
+      <div class="mr-2">
+        <button class="p-2" type="button" mdbBtn color="primary" (click)="clearSearch()" mdbWavesEffect>נקה</button>
       </div>
       <div class="md-form my-1">
         <input
@@ -20,7 +20,7 @@
           id="search"
           mdbInput
           dir="rtl"
-          style="max-width: 40vw;"
+          style="max-width: 30vw;"
         />
         <label for="search">חיפוש</label>
       </div>
