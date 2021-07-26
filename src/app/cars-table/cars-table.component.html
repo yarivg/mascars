@@ -1,17 +1,15 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-3 mx-auto">
-      <div class="my-3">
-        <div><b>כמות רכבים כוללת: </b>
-          {{elements.length}}
-        </div>
-        <div><b>כמות רכבים בסינון: </b>
-          {{filteredElements.length}}
-        </div>
+<div class="container-fluid">
+  <div class="row justify-content-around">
+    <div class="col-xs-4 my-0 text-right">
+      <div><b>כמות רכבים כוללת: </b>
+        {{elements.length}}
+      </div>
+      <div><b>כמות רכבים בסינון: </b>
+        {{filteredElements.length}}
       </div>
     </div>
-    <div class="col-md-4 mx-auto">
-      <div class="md-form my-3">
+    <div class="col-xs-4">
+      <div class="md-form my-1">
         <input
           type="text"
           [(ngModel)]="searchText"
@@ -25,8 +23,8 @@
     </div>
   </div>
   <div class="table-responsive-sm">
-    <table mdbTable mdbTableScroll maxHeight="200" [bordered]="true" class="z-depth-1 text-center"
-           dir="rtl" [scrollY]="true" [maxHeight]="300" [stickyHeader]="true"
+    <table mdbTable mdbTableScroll [bordered]="true" class="z-depth-1 text-center"
+           dir="rtl" [scrollY]="true" [maxHeight]="470" [stickyHeader]="true"
            [stickyHeaderBgColor]="'#283593'" [stickyHeaderTextColor]="'#ffffff'">
       <thead>
       <tr>
@@ -48,7 +46,8 @@
         <td class="py-1">
           <select class="browser-default custom-select" [(ngModel)]="carColor">
             <option [value]="undefined" selected>בחר צבע</option>
-            <option *ngFor="let colorOption of colorOptions" [value]="colorOption.colorKey">{{colorOption.colorOption.text}}</option>
+            <option *ngFor="let colorOption of colorOptions"
+                    [value]="colorOption.colorKey">{{colorOption.colorOption.text}}</option>
           </select>
         </td>
         <td class="py-1">
