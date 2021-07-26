@@ -1,6 +1,6 @@
 <div class="container-fluid">
-  <div class="row justify-content-around">
-    <div class="col-xs-4 my-0 text-right">
+  <div class="row d-flex justify-content-around align-items-center">
+    <div class="col-xs-4 text-right">
       <div><b>כמות רכבים כוללת: </b>
         {{elements.length}}
       </div>
@@ -8,7 +8,10 @@
         {{filteredElements.length}}
       </div>
     </div>
-    <div class="col-xs-3">
+    <div class="col-xs-3 d-flex justify-content-between align-items-center">
+      <div class="mr-2 ">
+        <button type="button" mdbBtn color="primary" (click)="clearSearch()" mdbWavesEffect>נקה</button>
+      </div>
       <div class="md-form my-1">
         <input
           type="text"
@@ -25,7 +28,7 @@
   </div>
   <div class="table-responsive-sm">
     <table mdbTable mdbTableScroll [bordered]="true" class="z-depth-1 text-center"
-           dir="rtl" [scrollY]="true" [maxHeight]="470" [stickyHeader]="true"
+           dir="rtl" [scrollY]="true" [maxHeight]="500" [stickyHeader]="true"
            [stickyHeaderBgColor]="'#283593'" [stickyHeaderTextColor]="'#ffffff'">
       <thead>
       <tr>
@@ -55,8 +58,9 @@
           <input mdbInput type="text" name="text" [(ngModel)]="name" id="nameForm" class="form-control">
         </td>
         <td>
-          <mdb-icon fas icon="plus-circle" class="text-success"
-                    (click)="addCar()" style="cursor: pointer" size="lg"></mdb-icon>
+          <mdb-icon fas icon="plus-circle"
+                    [ngClass]="{'enabled-add-car': validateNewCarInsert(), 'disabled-add-car': !validateNewCarInsert()}"
+                    (click)="addCar()" size="lg"></mdb-icon>
         </td>
       </tr>
       <tr *ngFor="let el of filteredElements; let i = index">
