@@ -1,11 +1,8 @@
 <div class="container-fluid">
-  <div class="row d-flex justify-content-around align-items-center">
+  <div class="row d-flex justify-content-around align-items-center mt-2">
     <div class="col-xs-4 text-right">
-      <div><b>סך אישורים: </b>
-        {{elements.length}}
-      </div>
-      <div><b>אישורים בסינון: </b>
-        {{filteredElements.length}}
+      <div><span class="font-weight-bold">סך אישורים (אחרי סינון):</span>
+        {{elements.length}} / {{filteredElements.length}}
       </div>
     </div>
     <div class="col-xs-3 d-flex justify-content-between align-items-center">
@@ -28,8 +25,8 @@
     </div>
   </div>
   <div class="table-responsive-sm">
-    <table mdbTable mdbTableScroll [bordered]="true" class="z-depth-1 text-center"
-           dir="rtl" [scrollY]="true" [maxHeight]="500" [stickyHeader]="true"
+    <table mdbTable mdbTableScroll [bordered]="true" class="z-depth-1 text-center" style="overflow: auto"
+           dir="rtl" [scrollY]="true" [maxHeight]="tableHeight" [stickyHeader]="true"
            [stickyHeaderBgColor]="'#283593'" [stickyHeaderTextColor]="'#ffffff'">
       <thead>
       <tr>
@@ -68,12 +65,14 @@
         <th scope="row">{{el.carSerial}}</th>
         <td>{{el.carType}}</td>
         <td class="p-2">
-          <div class="d-flex justify-content-center align-items-center p-0">
-            <div class="ml-2" [ngStyle]="{'background-color': colorPresentation[el.color].rgb}"
-                 style="width: 2.5vw; height: 2.5vw; right: 6vw; position: relative; bottom: 1vh;">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-md-7">
+              {{colorPresentation[el.color].text}}
             </div>
-            <br/>
-            {{colorPresentation[el.color].text}}
+            <div class="col-md-2" [ngStyle]="{'background-color': colorPresentation[el.color].rgb}"
+                 style="width: 2.5vw; height: 2.5vw;">
+            </div>
+            <div class="col-md-3"></div>
           </div>
         </td>
         <td>{{el.name}}</td>

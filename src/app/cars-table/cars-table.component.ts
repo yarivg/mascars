@@ -37,6 +37,7 @@ export class CarsTableComponent implements OnInit {
   colorOptions: ColorOptionCode[] = [];
   currentUser$: Observable<User | undefined>;
   user: User | undefined;
+  tableHeight: number;
 
   constructor(private carsService: CarsService,
               public authService: AuthService) {
@@ -46,7 +47,13 @@ export class CarsTableComponent implements OnInit {
     this.searchItems();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    this.tableHeight = window.innerHeight * 0.7;
+  }
+
   ngOnInit(): void {
+    this.tableHeight = window.innerHeight * 0.7;
     this.currentUser$ = this.authService.loggedInUser$;
 
     this.currentUser$.pipe(first(), mergeMap((user: User | undefined) => {
@@ -130,7 +137,7 @@ export class CarsTableComponent implements OnInit {
   }
 
   validateNewCarInsert(): boolean {
-    return this.carType.trim().length > 0 && this.carColor.length > 0 &&
+    return this.carType.trim().length > 0 && this.carColor !== 'undefined' &&
       this.serial.trim().length > 0 && this.name.trim().length > 0;
   }
 }

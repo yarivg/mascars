@@ -21,6 +21,8 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {SignInComponent} from './sign-in/sign-in.component';
 import {AuthService} from './services/auth.service';
 import {UsersService} from './services/users.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyBrt3ZmhdbUezZzjLboOL5v6_Tw9_1O8Nw',
@@ -52,7 +54,12 @@ const firebaseConfig = {
     FormsModule,
     WavesModule,
     TableModule,
-    InputsModule
+    InputsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
+    AngularFirestoreModule.enablePersistence()
   ],
   providers: [CarsService, AuthService, UsersService],
   bootstrap: [AppComponent]
