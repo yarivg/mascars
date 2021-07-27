@@ -1,9 +1,7 @@
-<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark unique-color ie-nav"
+<mdb-navbar id="navbarID" SideClass="navbar navbar-expand-lg navbar-dark unique-color"
             dir="rtl" [containerInside]="false">
   <mdb-navbar-brand><h1 class="navbar-brand text-white">משכיות | אישורי כניסה</h1></mdb-navbar-brand>
   <links>
-    <ul class="navbar-nav ml-auto">
-    </ul>
     <ul class="navbar-nav">
       <li class="nav-item waves-light" mdbWavesEffect>
         <img src="assets/bikat-yarden.png" height="55" width="55" style="background-color: transparent">
@@ -12,10 +10,17 @@
         <img src="assets/maskiot.png" height="55" width="55" style="background-color: transparent">
       </li>
       <li *ngIf="user" class="nav-item waves-light text-white">{{'שלום, ' + user.displayName}}</li>
-      <li *ngIf="user" class="nav-item waves-light text-white" mdbWavesEffect (click)="authService.signOut()">
-        <button type="button" class="btn btn-light p-2" (click)="authService.signOut()">
+      <li *ngIf="user" class="nav-item waves-light text-white" mdbWavesEffect>
+        <button type="button" class="btn btn-light p-2" (click)="signOut()">
           <img src="assets/google.png" width="30" height="30" /> להתנתקות
         </button>
+      </li>
+      <li class="nav-item waves-light text-white" mdbWavesEffect>
+         מייל מפתחים - {{supportMail}}
+        <br/>
+        {{releaseDate}}
+        <br/>
+        {{version}} <i class="far fa-registered"></i>
       </li>
     </ul>
   </links>

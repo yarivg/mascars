@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {version, supportMail, releaseDate} from '../../../package.json';
 import {AuthService} from '../services/auth.service';
 import {User} from '../entities/user';
+import {NavbarComponent as MDBNavbar} from 'angular-bootstrap-md';
 
 @Component({
   selector: 'app-navbar',
@@ -8,7 +10,12 @@ import {User} from '../entities/user';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  version: string = version;
+  supportMail: string = supportMail;
+  releaseDate: string = releaseDate;
   user: User | undefined;
+  @ViewChild('navbarID')
+  private mdbNavbar: MDBNavbar;
 
   constructor(public authService: AuthService) {
   }
@@ -19,4 +26,14 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  signOut(): void {
+    this.authService.signOut();
+    this.toggleNavbar();
+  }
+
+  toggleNavbar(): void {
+    if (this.mdbNavbar.shown) {
+      this.mdbNavbar.toggle();
+    }
+  }
 }
