@@ -1,11 +1,11 @@
 <div class="container-fluid">
-  <div class="row d-flex justify-content-around align-items-center mt-2">
-    <div class="col-xs-4 text-right">
+  <div class="row d-flex justify-content-around align-items-center mt-2 px-2">
+    <div class="text-right">
       <div><span class="font-weight-bold">סך אישורים (אחרי סינון):</span>
         {{elements.length}} / {{filteredElements.length}}
       </div>
     </div>
-    <div class="col-xs-3 d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center">
       <div class="mr-2">
         <button class="p-2" type="button" mdbBtn color="primary" (click)="clearSearch()" mdbWavesEffect>נקה</button>
       </div>
@@ -18,7 +18,7 @@
           id="search"
           mdbInput
           dir="rtl"
-          style="max-width: 30vw;"
+          style="max-width: 25vw;"
         />
         <label for="search">חיפוש</label>
       </div>
