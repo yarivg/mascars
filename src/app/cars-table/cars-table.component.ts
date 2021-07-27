@@ -5,6 +5,8 @@ import {Car} from '../entities/car';
 import {CarsService} from '../services/cars.service';
 import {v4 as uuidv4} from 'uuid';
 import {ColorOptionCode} from '../entities/color-option-code';
+import {User} from '../entities/user';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'app-cars-table',
@@ -22,6 +24,7 @@ export class CarsTableComponent implements OnInit {
     'שם',
     'פעולות'
   ];
+  alreadyRemoveActionsHeadElement = false;
   colorPresentation = ColorPresentation;
   searchText = '';
   text: string;
@@ -30,8 +33,10 @@ export class CarsTableComponent implements OnInit {
   carColor = '';
   name = '';
   colorOptions: ColorOptionCode[] = [];
+  user: User | undefined;
 
-  constructor(private carsService: CarsService) {
+  constructor(private carsService: CarsService,
+              public authService: AuthService) {
   }
 
   @HostListener('input') oninput(): void {
@@ -48,6 +53,14 @@ export class CarsTableComponent implements OnInit {
 
     this.mdbTable.setDataSource(this.elements);
     this.initColorOptions();
+
+    this.authService.loggedInUser$.subscribe((user: User | undefined) => {
+      this.user = user;
+      if (user && !this.alreadyRemoveActionsHeadElement && !this.authService.canEdit(user)) {
+        this.headElements = this.headElements.slice(0, this.headElements.length - 1);
+        this.alreadyRemoveActionsHeadElement = true;
+      }
+    });
   }
 
   searchItems(): void {

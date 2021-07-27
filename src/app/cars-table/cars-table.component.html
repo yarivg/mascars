@@ -15,6 +15,7 @@
       <div class="md-form my-1">
         <input
           type="text"
+          autocomplete="off"
           [(ngModel)]="searchText"
           class="form-control"
           id="search"
@@ -40,7 +41,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr class="md-form">
+      <tr *ngIf="authService.canEdit(user)" class="md-form">
         <td class="py-1">
           <input mdbInput type="text" name="text" [(ngModel)]="serial" id="serialForm" class="form-control">
         </td>
@@ -76,7 +77,7 @@
           </div>
         </td>
         <td>{{el.name}}</td>
-        <td style="width: 8vw">
+        <td *ngIf="authService.canEdit(user)" style="width: 8vw">
           <div class="d-flex justify-content-around">
             <!--          <mdb-icon far icon="edit" class="indigo-text" size="lg"></mdb-icon>-->
             <mdb-icon (click)="deleteCar(el)" far icon="trash-alt"
