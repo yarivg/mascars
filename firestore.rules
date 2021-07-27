@@ -1,8 +1,20 @@
-rules_version = '2';
+rules_version = '3';
 service cloud.firestore {
-  match /databases/{database}/documents {
+  match /databases/{database}/documents/cars {
+    function getRole(role) {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles[role]
+    }
+
     match /{document=**} {
-      allow read, write: if true;
+      allow read;
+      allow update: if getRole('editor') == true;
+      allow create, delete: if getRole('admin') == true;
+    }
+  }
+
+  match /databases/{database}/documents/users {
+    match /{document=**} {
+      allow read, create, update, delete;
     }
   }
 }

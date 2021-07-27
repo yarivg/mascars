@@ -4,6 +4,7 @@ import {AuthService} from '../services/auth.service';
 import {User} from '../entities/user';
 import {NavbarComponent as MDBNavbar} from 'angular-bootstrap-md';
 import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -23,10 +24,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser$ = this.authService.loggedInUser$;
-    this.currentUser$.subscribe((user) => {
-      this.toggleShownNavbar();
-      console.log(user);
-    });
+    this.currentUser$.subscribe(() => this.toggleShownNavbar());
   }
 
   signOut(): void {
