@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents/cars {
     function getRole(role) {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles[role]
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles[role];
     }
 
     match /{document=**} {
