@@ -1,27 +1,23 @@
 <mdb-navbar id="navbarID" SideClass="navbar navbar-expand-lg navbar-dark unique-color"
-            dir="rtl" [containerInside]="false">
-  <mdb-navbar-brand><h1 class="navbar-brand text-white">משכיות | אישורי כניסה</h1></mdb-navbar-brand>
-  <links>
-    <ul class="navbar-nav">
-      <li class="nav-item waves-light" mdbWavesEffect>
-        <img src="assets/bikat-yarden.png" height="55" width="55" style="background-color: transparent">
-      </li>
-      <li class="nav-item waves-light" mdbWavesEffect>
-        <img src="assets/maskiot.png" height="55" width="55" style="background-color: transparent">
-      </li>
-      <li *ngIf="user" class="nav-item waves-light text-white">{{'שלום, ' + user.displayName}}</li>
-      <li *ngIf="user" class="nav-item waves-light text-white" mdbWavesEffect>
+            dir="rtl" class="pb-1" [containerInside]="true">
+  <mdb-navbar-brand (click)="toggleNavbar()"><h1 class="navbar-brand text-white">משכיות | אישורי כניסה</h1>
+  </mdb-navbar-brand>
+  <links style="direction: ltr;">
+    <div *ngIf="currentUser$ | async as user" class="text-white">
+      <div *ngIf="user !== undefined">
         <button type="button" class="btn btn-light p-2" (click)="signOut()">
-          <img src="assets/google.png" width="30" height="30" /> להתנתקות
+          <img src="assets/google.png" width="30" height="30"/> התנתק/י
         </button>
-      </li>
-      <li class="nav-item waves-light text-white" mdbWavesEffect>
-         מייל מפתחים - {{supportMail}}
-        <br/>
-        {{releaseDate}}
-        <br/>
-        {{version}} <i class="far fa-registered"></i>
-      </li>
-    </ul>
+        {{'שלום, ' + user.displayName}}
+      </div>
+    </div>
+    <div class="text-white pl-5 font-italic">
+      <i class="far fa-registered"></i>
+      {{version + ' | ' + releaseDate + ' | ' + supportMail}}
+    </div>
+    <div class="pl-5">
+      <img src="assets/bikat-yarden.png" height="55" width="55" style="background-color: transparent">
+      <img src="assets/maskiot.png" height="55" width="55" style="background-color: transparent">
+    </div>
   </links>
 </mdb-navbar>

@@ -7,6 +7,8 @@ import {v4 as uuidv4} from 'uuid';
 import {ColorOptionCode} from '../entities/color-option-code';
 import {User} from '../entities/user';
 import {AuthService} from '../services/auth.service';
+import {first, mergeMap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-cars-table',
@@ -33,6 +35,7 @@ export class CarsTableComponent implements OnInit {
   carColor = '';
   name = '';
   colorOptions: ColorOptionCode[] = [];
+  currentUser$: Observable<User | undefined>;
   user: User | undefined;
 
   constructor(private carsService: CarsService,
@@ -44,23 +47,27 @@ export class CarsTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carsService.getCars().subscribe((value: Car[]) => {
-      this.elements = value;
+    this.currentUser$ = this.authService.loggedInUser$;
+
+    this.currentUser$.pipe(first(), mergeMap((user: User | undefined) => {
+      this.user = user;
+
+      if (user && !this.alreadyRemoveActionsHeadElement && !this.authService.canEdit(user)) {
+        this.headElements = this.headElements.slice(0, this.headElements.length - 1);
+        this.alreadyRemoveActionsHeadElement = true;
+      }
+
+      return this.carsService.getCars();
+    })).subscribe((cars: Car[]) => {
+      this.elements = cars;
+      this.mdbTable.setDataSource(cars);
       this.initNoDashSerials();
       this.elements.sort((a, b) => Number(a.carSerialWithNoDashes) - Number(b.carSerialWithNoDashes));
       this.searchItems();
     });
 
-    this.mdbTable.setDataSource(this.elements);
-    this.initColorOptions();
 
-    this.authService.loggedInUser$.subscribe((user: User | undefined) => {
-      this.user = user;
-      if (user && !this.alreadyRemoveActionsHeadElement && !this.authService.canEdit(user)) {
-        this.headElements = this.headElements.slice(0, this.headElements.length - 1);
-        this.alreadyRemoveActionsHeadElement = true;
-      }
-    });
+    this.initColorOptions();
   }
 
   searchItems(): void {

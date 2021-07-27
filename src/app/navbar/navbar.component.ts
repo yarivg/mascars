@@ -3,6 +3,7 @@ import {version, supportMail, releaseDate} from '../../../package.json';
 import {AuthService} from '../services/auth.service';
 import {User} from '../entities/user';
 import {NavbarComponent as MDBNavbar} from 'angular-bootstrap-md';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -13,27 +14,32 @@ export class NavbarComponent implements OnInit {
   version: string = version;
   supportMail: string = supportMail;
   releaseDate: string = releaseDate;
-  user: User | undefined;
-  @ViewChild('navbarID')
+  currentUser$: Observable<User | undefined>;
+  @ViewChild(MDBNavbar)
   private mdbNavbar: MDBNavbar;
 
   constructor(public authService: AuthService) {
   }
 
   ngOnInit(): void {
-    this.authService.loggedInUser$.subscribe((user: User | undefined) => {
-      this.user = user;
+    this.currentUser$ = this.authService.loggedInUser$;
+    this.currentUser$.subscribe((user) => {
+      this.toggleShownNavbar();
+      console.log(user);
     });
   }
 
   signOut(): void {
     this.authService.signOut();
-    this.toggleNavbar();
+  }
+
+  toggleShownNavbar(): void {
+    if (this.mdbNavbar.isShown) {
+      this.toggleNavbar();
+    }
   }
 
   toggleNavbar(): void {
-    if (this.mdbNavbar.shown) {
-      this.mdbNavbar.toggle();
-    }
+    this.mdbNavbar.toggle();
   }
 }

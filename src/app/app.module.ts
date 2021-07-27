@@ -20,6 +20,7 @@ import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {SignInComponent} from './sign-in/sign-in.component';
 import {AuthService} from './services/auth.service';
+import {UsersService} from './services/users.service';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyBrt3ZmhdbUezZzjLboOL5v6_Tw9_1O8Nw',
@@ -53,7 +54,7 @@ const firebaseConfig = {
     TableModule,
     InputsModule
   ],
-  providers: [CarsService, AuthService],
+  providers: [CarsService, AuthService, UsersService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

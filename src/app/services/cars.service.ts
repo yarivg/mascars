@@ -5,9 +5,7 @@ import {Car} from '../entities/car';
 
 @Injectable()
 export class CarsService {
-
   constructor(private db: AngularFirestore) {
-
   }
 
   getCars(): Observable<Car[]> {
@@ -21,6 +19,4 @@ export class CarsService {
   addCar(car: Car): Observable<void> {
     return from(this.db.collection('cars').doc(car.id).set(car));
   }
-
-
 }

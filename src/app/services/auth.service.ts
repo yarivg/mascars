@@ -5,8 +5,9 @@ import firebase from 'firebase/app';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
-import {Observable, of} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
+import {combineLatest, from, Observable, of} from 'rxjs';
+import {first, mergeMap, switchMap} from 'rxjs/operators';
+import {UsersService} from './users.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,8 @@ export class AuthService {
     public afs: AngularFirestore,
     public afAuth: AngularFireAuth,
     public router: Router,
-    public ngZone: NgZone
+    public ngZone: NgZone,
+    public usersService: UsersService
   ) {
     this.user$ = this.afAuth.authState.pipe(
       switchMap((user => {
@@ -53,41 +55,34 @@ export class AuthService {
     return this.user$;
   }
 
-  get loggedInUser(): any {
-    const user = localStorage.getItem('user');
-
-    if (user !== null && user !== '') {
-      return JSON.parse(user);
-    }
+  googleAuth(): void {
+    this.authLogin(new firebase.auth.GoogleAuthProvider());
   }
 
-  googleAuth(): Promise<void> {
-    return this.authLogin(new firebase.auth.GoogleAuthProvider());
-  }
-
-  authLogin(provider: any): Promise<void> {
-    return firebase.auth().signInWithPopup(provider)
-      .then((result) => {
-        this.setUserData(result.user);
+  authLogin(provider: any): void {
+    from(firebase.auth().signInWithPopup(provider))
+      .pipe(first(), mergeMap((firebaseUserCredential: firebase.auth.UserCredential) => {
+        return combineLatest(
+          of(firebaseUserCredential),
+          firebaseUserCredential.user ? this.usersService.getUserById(firebaseUserCredential.user.uid) : of(undefined));
+      }), mergeMap(([firebaseUserCredential, userResultWrapper]) => {
+        this.setUserData(firebaseUserCredential.user, userResultWrapper);
         this.ngZone.run(() => {
           this.router.navigate(['cars']);
         });
-      }).catch((error) => {
-        window.alert(error);
-      });
+        return of(true);
+      })).subscribe();
   }
 
-  setUserData(user: any): Promise<void> {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+  setUserData(firebaseUser: any, user: User | undefined): Promise<void> {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${firebaseUser.uid}`);
     const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified,
-      roles: {
-        subscriber: true
-      }
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
+      displayName: firebaseUser.displayName,
+      photoURL: firebaseUser.photoURL,
+      emailVerified: firebaseUser.emailVerified,
+      roles: user !== undefined ? user.roles : {subscriber: true}
     };
 
     return userRef.set(userData, {
@@ -116,6 +111,4 @@ export class AuthService {
     const allowed = ['admin'];
     return user !== undefined && AuthService.checkAuthorization(user, allowed);
   }
-
-
 }
